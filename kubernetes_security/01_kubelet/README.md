@@ -10,6 +10,7 @@ Before fixing the kubelet we will try to get sensitive data via the kubelet.
 # exit the VM - for being in the Google Cloud Shell again
 exit
 
+# TODO not needed anymore? $IP should be set via .trainingrc file
 # store the external IP of the worker node
 export IP=$(gcloud compute instances list --filter="name=kubernetes-security" --format json | jq '.[].networkInterfaces[].accessConfigs[].natIP' | tr -d \")
 ```
@@ -40,27 +41,23 @@ gcloud compute ssh root@kubernetes-security --zone europe-west3-a
 
 ### vi the kubelet config
 
-``` bash
+```bash
 vi /var/lib/kubelet/config.yaml
 ```
 
 ### Fix Authentication
 
 ```yaml
-...
 authentication:
   anonymous:
     enabled: true # <= change to false
-...    
 ```
 
 ### Fix Authorization
 
 ```yaml
-...
 authorization:
   mode: AlwaysAllow # <= change to Webhook
-...  
 ```
 
 ### Restart the kubelet and check the status

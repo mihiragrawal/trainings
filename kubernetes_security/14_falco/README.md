@@ -1,4 +1,3 @@
-
 # Runtime Security with Falco
 
 ## Verify installation
@@ -10,11 +9,13 @@ systemctl status falco
 ## Configure Falco
 
 Edit the Falco configuration file
+
 ```bash
 vi /etc/falco/falco.yaml
 ```
 
 Configure the `file_output` section to the following.
+
 ```yaml
 file_output:
   enabled: true
@@ -22,12 +23,7 @@ file_output:
   filename: /var/log/falco.log
 ```
 
-Restart Falco
-```bash
-systemctl restart falco
-```
-
-# Verify logging
+## Verify logging
 
 ```bash
 # exec into the pod (and exit afterwards)
