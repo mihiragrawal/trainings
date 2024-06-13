@@ -18,6 +18,7 @@
 		"ghcr.io/rio/features/k9s:1": {},
 		"ghcr.io/devcontainers/features/terraform:1": {},
 		"sshd": "latest",
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
 		//"ghcr.io/audacioustux/devcontainers/k9s:1": {},
 	}
 
